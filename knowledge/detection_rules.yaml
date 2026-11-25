@@ -1,0 +1,27 @@
+version: 1
+production:
+  detector_threshold_change: none
+  clip_lane:
+    require_review_for: [phonetic_substitution, language_interference, local_spectral_change, audio_embedding_outlier]
+    asr_words_certify_pronunciation: false
+research:
+  approximate_points:
+    distance: predicted_midpoint_to_marker
+    main_tolerance_s: 2.5
+    sensitivity_tolerances_s: [1.0, 5.0]
+    assignment: maximum_cardinality_then_minimum_total_distance
+  local_acoustic_novelty:
+    implementation: audioqa/research_features.py
+    input: decoded_sample_clock
+    exported_candidate_floor: 6.5
+    dashboard_floor: 8.5
+    trial_thresholds: [6.5, 7.5, 8.5, 9.5]
+    status: exploratory_same_recording
+  yamnet_neighbors:
+    exclude_nearby_s: 30
+    nearest_neighbors: 5
+    maximum_proposals_per_two_minutes_on_average: 1
+    status: exploratory_same_recording
+  pronunciation:
+    require_authoritative_manuscript_or_native_review_for_error: true
+    competing_crops_padding_s: [0, 0.06, 0.12]

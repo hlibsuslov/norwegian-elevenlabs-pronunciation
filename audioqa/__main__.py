@@ -99,6 +99,8 @@ def make_parser():
     command=commands.add_parser("review")
     command.add_argument("--report",type=Path,required=True)
     command.add_argument("--serve",action="store_true")
+    command.add_argument("--dataset",type=Path,help="Persist edits to this research dataset.")
+    command.add_argument("--dataset-proxy",type=Path,help="Decoded float WAV on the research sample clock.")
     command.add_argument("--env-file",type=Path)
     command.add_argument("--generation-metadata",type=Path)
     command.add_argument("--port",type=int,default=8765)
@@ -219,7 +221,8 @@ def main():
             if args.serve:
                 serve(args,report)
             else:
-                print((args.report.resolve().parents[1]/"review/index.html").as_uri())
+                filename=f"{report['review_run']}.html" if report.get("dataset_review") else "index.html"
+                print((args.report.resolve().parents[1]/"review"/filename).as_uri())
         elif args.command=="repair":
             repair(args)
         elif args.command=="benchmark":

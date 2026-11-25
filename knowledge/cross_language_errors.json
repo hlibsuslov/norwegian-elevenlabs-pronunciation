@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "adjudicated_errors": [],
+  "verified_lexical_contrasts": [
+    {
+      "word":"holder",
+      "norwegian_verb_ipa":"ˈhɔ.lər",
+      "norwegian_profile":"NB Uttale e_written",
+      "english_us_arpabet":["HH","OW1","L","D","ER0"],
+      "english_us_broad_ipa":"ˈhoʊldɚ",
+      "diagnostic_cues":["initial vowel","possible [d]","final rhotic quality"],
+      "sources":["https://www.nb.no/sprakbanken/ressurskatalog/en/oai-nb-no-sbr-79/","https://github.com/cmusphinx/cmudict"]
+    }
+  ],
+  "case_study": "datasets/elevenlabs_audio_qa/metadata/qa-001-phones.json"
+}

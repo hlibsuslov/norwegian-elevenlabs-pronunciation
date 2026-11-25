@@ -21,6 +21,14 @@ def serve(args,report):
     metadata=read_json(args.generation_metadata) if args.generation_metadata else {}
     api=make_api(args) if args.max_api_budget or args.max_regenerations else None
     lock=Lock()
+    dataset=None
+    if args.dataset:
+        from .research_review import ReviewDataset
+
+        if not args.dataset_proxy:
+            raise ValueError("--dataset-proxy is required when saving research decisions.")
+        dataset=ReviewDataset(args.dataset,report,args.dataset_proxy)
+    page=f"{report['review_run']}.html" if report.get("dataset_review") else "index.html"
 
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self,*values,**kwargs):
@@ -29,9 +37,10 @@ def serve(args,report):
         def do_GET(self):
             path=urlsplit(self.path).path
             if path in {"/","/index.html"}:
-                html=(review/"index.html").read_text(encoding="utf-8")
-                if api:
-                    html=html.replace("</head>",f"<script>window.audioqaToken={json.dumps(token)}</script></head>")
+                html=(review/page).read_text(encoding="utf-8")
+                if api or dataset:
+                    state=json.dumps(dataset.decisions() if dataset else {},ensure_ascii=False).replace("<","\\u003c")
+                    html=html.replace("</head>",f"<script>window.audioqaToken={json.dumps(token)};window.audioqaDecisions={state}</script></head>")
                 content=html.encode()
                 self.send_response(200)
                 self.send_header("Content-Type","text/html; charset=utf-8")
@@ -52,6 +61,18 @@ def serve(args,report):
             self.wfile.write(encoded)
 
         def do_POST(self):
+            if self.path=="/api/decision" and dataset and self.headers.get("X-AudioQA-Token")==token:
+                try:
+                    length=int(self.headers.get("Content-Length","0"))
+                    if not 0<length<=24576:
+                        raise ValueError("Invalid request length.")
+                    request=json.loads(self.rfile.read(length))
+                    if not isinstance(request,dict):
+                        raise ValueError("Decision must be a JSON object.")
+                    self.reply(200,{"decision":dataset.save(request)["history"][-1]})
+                except (ValueError,TypeError,RuntimeError,OSError) as exc:
+                    self.reply(400,{"error":str(exc)})
+                return
             if self.path!="/api/regenerate" or not api or self.headers.get("X-AudioQA-Token")!=token:
                 self.reply(403,{"error":"No active regeneration authorization."})
                 return

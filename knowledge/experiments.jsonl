@@ -1,0 +1,6 @@
+{"id":"qa-001-blind","date":"2026-11-25","kind":"frozen_baseline","status":"complete","artifact":"datasets/elevenlabs_audio_qa/metadata/baseline_predictions.json"}
+{"id":"qa-001-signal","date":"2026-11-25","kind":"rule_threshold_experiment","status":"exploratory_same_recording","artifact":"datasets/elevenlabs_audio_qa/metadata/qa-001-benchmark.json"}
+{"id":"qa-001-yamnet","date":"2026-11-25","kind":"embedding_outlier_comparison","status":"exploratory_same_recording","artifact":"datasets/elevenlabs_audio_qa/metadata/qa-001-embedding-scan.json"}
+{"id":"qa-001-phones","date":"2026-11-25","kind":"independent_phone_scoring","status":"pending_native_review","artifact":"datasets/elevenlabs_audio_qa/metadata/qa-001-phones.json"}
+{"id":"qa-001-audio-reviewer","date":"2026-11-25","kind":"prompt_evaluation","status":"exploratory_same_recording","artifact":"datasets/elevenlabs_audio_qa/metadata/qa-001-audio-reviewer.json"}
+{"id":"qa-001-local-repair","date":"2026-11-25","kind":"local_dsp_repair_audition","status":"none_accepted","artifact":"datasets/elevenlabs_audio_qa/metadata/qa-001-experiments.json"}

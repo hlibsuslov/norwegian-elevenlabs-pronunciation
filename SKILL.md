@@ -1,6 +1,6 @@
 ---
 name: norwegian-elevenlabs-pronunciation
-description: Analyze and improve Norwegian Bokmål pronunciation, stress, lexical tone and prosody for ElevenLabs. Use for Norwegian TTS preflight, pronunciation dictionaries, long-recording artifact review, targeted audio repair, and Bokmål, Ukrainian and English educational voiceovers with code-switching.
+description: Scan ElevenLabs audio for artifacts, Norwegian pronunciation problems, and language interference. Use for long MP3 or WAV recordings, review and targeted repair, Norwegian Bokmål stress and lexical tone, pronunciation dictionaries, and Bokmål, Ukrainian and English educational voiceovers.
 ---
 
 # Norwegian ElevenLabs pronunciation
@@ -23,3 +23,7 @@ Run `python -m scripts.workflow MODE` from this directory. Use a new output dire
 - Use the [acoustic and learning workflow](references/acoustic_workflow.md) for alignment, comparison and review. Report candidate defects, accepted edits, uncertainties and provider-reported cost from the output artifacts. Retain the prior audio whenever the comparison is inconclusive.
 
 For an existing recording, batches, or mixed Bokmål–Ukrainian–English material, use `python -m audioqa` and read the [audio QA guide](references/audioqa.md). Start with a local scan and an explicitly multilingual ASR model. Add a manuscript or subtitles when available, and keep expected locale, recognized language and observed pronunciation distinct. Use the review dashboard for candidate clips, and require verified evidence before attributing a lecture error or accepting a regenerated take.
+
+When invoked with an audio file, run the scan from the directory containing this skill. Prefer the repository's `.venv/Scripts/python.exe` on Windows or `.venv/bin/python` on Unix when available. Run `python -m audioqa scan --audio "<file>" --deep --language auto --local-only --out "<new run directory>"`. Add `--asr faster=models/asr/whisper-small` when that local multilingual model is installed, or point to another installed multilingual model. If none is available, use `--artifact-only` and report that only signal candidates were checked. Return the review page and identify which evidence requires listening.
+
+For a labeled recording or an iterative audio QA study, follow the [recording research protocol](references/real_audio_qa.md). Freeze a separate label-free scan before opening the annotation input. Keep approximate points, detector candidates and adjudicated intervals distinct. Save review decisions by recording and source SHA-256. Check [prior experiments](knowledge/experiments.jsonl) and [known limits](knowledge/known_limitations.md) before changing detector thresholds or pronunciation rules.

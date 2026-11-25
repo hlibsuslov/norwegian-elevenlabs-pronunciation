@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "approved_real_audio_repairs": [],
+  "supported_validation": [
+    {"method":"sample_interpolation","eligibility":"Sample-clock impulse inside a bounded interval up to 12 ms, with valid neighbors.","implementation":"scripts/repair_artifacts.py","validation":"Local digital detector improves, full assembled digital rescan and human review if uncertain."},
+    {"method":"sentence_regeneration","eligibility":"Verified expected source and intended locale, generation metadata and explicit credit budget.","validation":"Review original and regenerated sentence with prosodic context and check their seams."}
+  ],
+  "auditions": "datasets/elevenlabs_audio_qa/metadata/qa-001-experiments.json"
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "runs": [
+    {
+      "id":"qa-001",
+      "date":"2026-11-25",
+      "split":"development",
+      "point_tolerance_s":2.5,
+      "approximate_annotations":{"artifact":17,"pronunciation":2,"cross_language_pronunciation":1},
+      "blind":{"candidates":7,"artifact_point_matches":1,"total_point_matches":1,"review_seconds":19.34,"processing_seconds":38.60},
+      "same_recording_experiments":[
+        {"method":"existing high-recall","candidates":27,"artifact_point_matches":1,"review_seconds":74.60},
+        {"method":"local acoustic novelty >= 7.5","candidates":115,"artifact_point_matches":7,"review_seconds":298.53},
+        {"method":"local acoustic novelty >= 6.5","candidates":449,"artifact_point_matches":14,"review_seconds":1041.37},
+        {"method":"YAMNet nearest-neighbor outliers","candidates":21,"artifact_point_matches":1,"broad_category_disagreements":1,"review_seconds":77.17}
+      ],
+      "precision":null,
+      "recall":null,
+      "f1":null,
+      "false_positives_per_hour":null,
+      "credits_used":0
+    }
+  ],
+  "independent_validation_runs":[]
+}

@@ -1,0 +1,42 @@
+{
+  "provenance": "Intervals are post-baseline proposals from targeted Whisper Large v3 and NB Whisper. The three input points remain approximate.",
+  "cases": [
+    {
+      "annotation_id": "6",
+      "word": "slå",
+      "scope": [940.98, 941.68],
+      "alternate_window": [938.20, 938.67],
+      "context": "Both recognizers place «Slå sammen» near 15:41. The preceding «I natt slår/slo været om til mildvær» contains a separate ambiguous token.",
+      "hypotheses": {
+        "nb_slå": ["ʃ", "l", "oː"],
+        "nb_slo": ["ʃ", "l", "uː"],
+        "nb_slå_short_vowel_label": ["ʃ", "l", "o"],
+        "nb_slo_short_vowel_label": ["ʃ", "l", "u"]
+      }
+    },
+    {
+      "annotation_id": "7",
+      "word": null,
+      "scope": [1059.7, 1061.7],
+      "alternate_window": [1057.80, 1058.22],
+      "context": "Both models recognize «Politiet slo … mot fyllekjøring i natt» just before the mark. At the mark the text is unstable and could be a transition into a Ukrainian explanation. «slo» below is an earlier contextual comparator.",
+      "hypotheses": {},
+      "alternate_hypotheses": {
+        "nb_slo": ["ʃ", "l", "uː"],
+        "nb_slå": ["ʃ", "l", "oː"]
+      }
+    },
+    {
+      "annotation_id": "18",
+      "word": "holder",
+      "scope": [1810.48, 1811.24],
+      "context": "NB Whisper places «holder» inside the conjugation list «å holde, holder, holdt, har holdt». The multilingual pass writes this region in Cyrillic. The marked 30:13 is closer to «har holdt».",
+      "hypotheses": {
+        "nb_lexical_tap": ["h", "ɔ", "l", "ə", "ɾ"],
+        "nb_lexical_r_label": ["h", "ɔ", "l", "ə", "r"],
+        "en_us": ["h", "oʊ", "l", "d", "ɚ"],
+        "en_uk_nonrhotic": ["h", "əʊ", "l", "d", "ə"]
+      }
+    }
+  ]
+}

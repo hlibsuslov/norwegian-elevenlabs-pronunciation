@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "confirmed_corrections": [],
+  "verified_lexical_targets": [
+    {"word":"slå","wordform":"infinitive/imperative","locale":"nb-NO","profile":"e_written","ipa":"ˈʃloː","lexical_accent":1},
+    {"word":"slo","wordform":"past tense","locale":"nb-NO","profile":"e_written","ipa":"ˈʃluː","lexical_accent":1},
+    {"word":"holder","wordform":"present tense of holde","locale":"nb-NO","profile":"e_written","ipa":"ˈhɔ.lər","lexical_accent":1}
+  ],
+  "source": "https://www.nb.no/sprakbanken/ressurskatalog/en/oai-nb-no-sbr-79/"
+}

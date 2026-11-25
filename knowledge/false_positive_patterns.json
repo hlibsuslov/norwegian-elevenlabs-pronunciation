@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "reviewed_audio_examples": [],
+  "observed_model_failure_modes": [
+    {"pattern":"Multimodal reviewer equates non-English speech with a glitch.","evidence":"Gemma 4 E2B output in qa-001, item 7.","action":"Discard that rationale as defect evidence. Review the actual transition and pronunciation."}
+  ],
+  "collect_for_review": ["fricatives","breaths","stop releases","legal accent contours","intentional code switches","mixed-language ASR normalization"]
+}

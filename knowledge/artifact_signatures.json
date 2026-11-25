@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "confirmed_signatures": [],
+  "admission": "Human-adjudicated interval, preserved source SHA-256, reviewed comparisons, measured cues and an independent recording when promoting a detector.",
+  "research_examples": "datasets/elevenlabs_audio_qa/metadata/qa-001-experiments.json"
+}

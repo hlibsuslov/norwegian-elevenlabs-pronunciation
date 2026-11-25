@@ -20,7 +20,9 @@ python -m scripts.setup_lexicon
 
 The index setup downloads the official CC0 NB Uttale v1.0 archive, verifies its SHA-256 and streams the selected dialect into SQLite. Use `--dialect w_written` or any profile in [dialects.yaml](config/dialects.yaml). Use `--archive path/to/nb_uttale_leksika.zip` for an offline install with a predownloaded official archive. The index and account-scoped synthesis cache live under `.data/` by default. Set `NELP_DATA_DIR` to place working data elsewhere. The archive is about 158 MB and each indexed profile takes additional disk space.
 
-For discovery in Codex, place or clone this directory at `$CODEX_HOME/skills/norwegian-elevenlabs-pronunciation` (usually `~/.codex/skills/norwegian-elevenlabs-pronunciation`) and invoke `$norwegian-elevenlabs-pronunciation`. For Claude Code, place the folder under `~/.claude/skills/` or the project’s `.claude/skills/`. Run module commands from the skill directory with the selected Python environment.
+For discovery across local Codex projects, put this directory at `~/.agents/skills/norwegian-elevenlabs-pronunciation` or link that location to the checkout where the models and dataset live. Invoke `$norwegian-elevenlabs-pronunciation` with the audio file. When the checkout is open as a project, [AGENTS.md](AGENTS.md) also routes requests to the skill. For Claude Code, place the folder under `~/.claude/skills/` or the project’s `.claude/skills/`. Run module commands from the skill directory with the selected Python environment.
+
+For an existing recording, install `requirements-audioqa.txt`. A local DSP scan works without model weights. For transcription add an installed multilingual Whisper checkpoint via `--asr faster=LOCAL_MODEL_DIR`. The scan returns `reports/defects.json` and `review/index.html`.
 
 ## Workflows
 

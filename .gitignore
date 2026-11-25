@@ -13,6 +13,16 @@ runs/
 models/asr/
 models/phoneme/
 models/anomaly_detection/
+models/audio_understanding/
+datasets/elevenlabs_audio_qa/raw_audio/*
+datasets/elevenlabs_audio_qa/review/
+datasets/elevenlabs_audio_qa/reports/
+datasets/elevenlabs_audio_qa/annotations/decisions/
+datasets/elevenlabs_audio_qa/acoustic_features/*/
+datasets/elevenlabs_audio_qa/embeddings/*.np*
+datasets/elevenlabs_audio_qa/repaired_examples/*/
+datasets/elevenlabs_audio_qa/metadata/
+datasets/elevenlabs_audio_qa/*/*-reviewed.json
 data/clean_reference/
 data/confirmed_artifacts/
 data/pronunciation_errors/
