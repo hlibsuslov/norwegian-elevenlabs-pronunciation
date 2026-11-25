@@ -1,0 +1,10 @@
+checked: '2026-11-25'
+default: eleven_v4
+output_format: pcm_24000
+models:
+  eleven_v4: {transport: dialogue, norwegian: true, aliases: true, phonemes: true, norwegian_ipa: true, inline_ipa: true, limit: 2000}
+  eleven_v4_turbo: {transport: dialogue_ws, norwegian: true, aliases: true, phonemes: true, norwegian_ipa: true, inline_ipa: true, limit: 2000}
+  eleven_v3: {transport: tts, norwegian: true, aliases: true, phonemes: true, norwegian_ipa: false, inline_ipa: true, limit: 5000}
+  eleven_multilingual_v2: {transport: tts, norwegian: false, aliases: true, phonemes: false, norwegian_ipa: false, inline_ipa: false, limit: 10000}
+  eleven_flash_v2_5: {transport: tts, norwegian: true, aliases: true, phonemes: false, norwegian_ipa: false, inline_ipa: false, limit: 40000}
+  eleven_flash_v2: {transport: tts, norwegian: false, aliases: true, phonemes: true, norwegian_ipa: false, inline_ipa: false, limit: 30000}

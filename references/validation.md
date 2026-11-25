@@ -1,0 +1,7 @@
+# Validation record
+
+25 November 2026, Windows with Python 3.12. NB Uttale's official archive passed SHA-256 verification. The Eastern and Western written profiles were indexed, and the Norwegian corpus ran against the Eastern profile. Local tests covered source offsets and normalization, stress and tonal pairs, dictionary storage and export, mocked HTTP and WebSocket responses, budget and cache, Praat TextGrid processing, acoustic decision guards, and crossfades.
+
+Live smoke checks returned playable 24 kHz samples on Eleven v4, v4 Turbo, v3 and Flash v2.5 using the same provider voice labelled Oslo. On v4 a PLS with source-attested segmental candidates was successfully uploaded and attached. NoFA 1.0 with MFA 1.0.1 aligned all 11 manuscript tokens in both v4 A/B takes and returned phone boundaries. Praat measured F0, duration and level. Multilingual Whisper base flagged three possible substitutions for each take and did not resolve whether the PLS improved pronunciation. No native reference or blind reviewer decision was supplied for this pair. The database contains zero confirmed corrections.
+
+The smoke check establishes transport and local tool interoperability on these samples. Native-held-out comparisons, thresholds across speakers and dialects, and fully validated live sentence repairs remain open. Do not treat support for a PLS tag as evidence that the model reproduces lexical tone.

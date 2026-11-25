@@ -1,0 +1,10 @@
+PyYAML>=6,<7
+requests>=2.32,<3
+websockets>=15,<17
+numpy>=1.26,<3
+praat-parselmouth>=0.4.5,<0.5
+python-dotenv>=1,<2
+filelock>=3.16,<4
+lingua-language-detector>=2,<3
+spacy>=3.8,<3.9
+nb-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/nb_core_news_sm-3.8.0/nb_core_news_sm-3.8.0-py3-none-any.whl

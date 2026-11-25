@@ -1,0 +1,25 @@
+# Conservative engineering defaults. Calibrate on matched native recordings.
+pitch_floor_hz: 70
+pitch_ceiling_hz: 550
+frame_step_seconds: 0.01
+pause_seconds: 0.65
+quiet_boundary_dbfs: -38
+boundary_search_seconds: 0.12
+crossfade_seconds: 0.012
+minimum_phone_seconds: 0.035
+minimum_compare_features: 2
+warning_reference_distance: 1.0
+minimum_improvement: 0.20
+maximum_feature_regression: 0.30
+maximum_nontarget_regression: 0.15
+maximum_segment_duration_ratio: 1.30
+max_repair_attempts: 2
+reference_units:
+  f0_shape_st: 2.5
+  relative_duration_log: 0.22
+  relative_intensity_db: 4.0
+  f1_bark: 1.5
+  f2_bark: 1.5
+  vowel_duration_log: 0.22
+  consonant_duration_log: 0.25
+  syllable_duration_log: 0.23

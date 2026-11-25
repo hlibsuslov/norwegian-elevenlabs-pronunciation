@@ -1,0 +1,13 @@
+default: e_written
+language: nb
+dialects:
+  e_written: {region: Eastern, register: read}
+  e_spoken: {region: Eastern, register: spoken}
+  n_written: {region: Northern, register: read}
+  n_spoken: {region: Northern, register: spoken}
+  sw_written: {region: Southwestern, register: read}
+  sw_spoken: {region: Southwestern, register: spoken}
+  t_written: {region: Central, register: read}
+  t_spoken: {region: Central, register: spoken}
+  w_written: {region: Western, register: read}
+  w_spoken: {region: Western, register: spoken}
