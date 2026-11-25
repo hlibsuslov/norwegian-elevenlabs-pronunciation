@@ -13,6 +13,9 @@ from .lookup_pronunciation import Lexicon
 def select_rule(token, sentence, analysis, model, voice, records, trials):
     word = token["text"]
     candidates = [row for row in records if key(row["word"]) == key(word)
+                  and row.get("word_language", "nb-NO") == "nb-NO"
+                  and row.get("context_language") in (None, "nb-NO")
+                  and not row.get("previous_language") and not row.get("next_language")
                   and row["dialect"] == analysis["dialect"] and row["model"] == model
                   and row["voice_id"] in (None, voice)
                   and (row["scope"] == "global" or key(row["context"]) == key(sentence))]
@@ -38,6 +41,8 @@ def phrase_rules(sentence, analysis, model, voice, records):
     for row in records:
         word = row["word"]
         if (not re.search(r"\s", word) or row["dialect"] != analysis["dialect"] or row["model"] != model
+                or row.get("word_language", "nb-NO") != "nb-NO" or row.get("context_language") not in (None, "nb-NO")
+                or row.get("previous_language") or row.get("next_language")
                 or row["voice_id"] not in (None, voice)
                 or (row["scope"] == "sentence" and key(row["context"]) != key(sentence))):
             continue

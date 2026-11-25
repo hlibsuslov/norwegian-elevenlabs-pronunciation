@@ -18,6 +18,9 @@ FIELDS = (
     "toneme", "source", "error_type", "method", "model", "voice_id", "confidence",
     "acoustic_review", "native_review", "replacement", "scope",
 )
+LANGUAGE_FIELDS = ("word_language", "context_language", "alternate_pronunciations",
+                   "interference_type", "previous_language", "next_language")
+LOCALES = {"nb-NO", "uk-UA", "en-US", "en-GB"}
 UNSUPPORTED_IPA_MARKERS = re.compile(r"""[<>&/"'¹²0123456789]""")
 
 
@@ -35,8 +38,22 @@ def validate_record(record):
         (record["scope"] == "sentence") != bool(record["context"])
     ):
         raise ValueError("Sentence scope requires the exact context sentence. Global scope requires null context.")
-    if record["dialect"] not in config("dialects")["dialects"]:
+    locale = record.get("word_language", "nb-NO")
+    if locale not in LOCALES or any(record.get(name) not in LOCALES | {None}
+            for name in ("context_language", "previous_language", "next_language")):
+        raise ValueError("Unknown correction locale.")
+    if (locale == "nb-NO" and record["dialect"] not in config("dialects")["dialects"]
+            or locale != "nb-NO" and record["dialect"] != locale):
         raise ValueError("Unknown dialect.")
+    alternatives = record.get("alternate_pronunciations", [])
+    if not isinstance(alternatives, list) or any(
+        not isinstance(item, str) or not item.strip() or UNSUPPORTED_IPA_MARKERS.search(item) for item in alternatives
+    ):
+        raise ValueError("Alternate pronunciations must be standard segmental/stress IPA strings.")
+    if record.get("interference_type") is not None and not isinstance(record["interference_type"], str):
+        raise ValueError("interference_type must be a text description or null.")
+    if locale != "nb-NO" and (record["scope"] != "sentence" or record["toneme"] is not None):
+        raise ValueError("A multilingual correction requires sentence scope and no Norwegian toneme.")
     if record["toneme"] not in (None, 1, 2) or isinstance(record["toneme"], bool):
         raise ValueError("toneme must be 1, 2 or null.")
     for name in ("primary_stress", "secondary_stress"):
@@ -66,11 +83,15 @@ def validate_record(record):
             raise ValueError("A phoneme rule requires documented Norwegian IPA and null replacement.")
     else:
         raise ValueError("method must be phoneme or alias.")
-    return {name: record[name] for name in FIELDS}
+    return {**{name: record[name] for name in FIELDS},
+            **{name: record[name] for name in LANGUAGE_FIELDS if name in record}}
 
 
 def identity(record):
-    return tuple(key(record[name] or "") for name in ("word", "dialect", "model", "voice_id", "context"))
+    original = tuple(key(record[name] or "") for name in ("word", "dialect", "model", "voice_id", "context"))
+    locale = record.get("word_language", "nb-NO")
+    neighbors = tuple(record.get(name) or "" for name in ("context_language", "previous_language", "next_language"))
+    return original if locale == "nb-NO" and not any(neighbors) else original + (locale, *neighbors)
 
 
 def verified_records(seed=None):
@@ -100,7 +121,7 @@ def learn(record):
     return record
 
 
-def make_pls(rules):
+def make_pls(rules, language="nb-NO"):
     grouped = {}
     for rule in rules:
         name = rule["word"]
@@ -110,7 +131,7 @@ def make_pls(rules):
         if not name or not value[1]:
             raise ValueError("PLS rules require a grapheme and value.")
         grouped[name] = value
-    tree = ET.Element(f"{{{PLS}}}lexicon", {"version": "1.0", "alphabet": "ipa", f"{{{XML}}}lang": "nb-NO"})
+    tree = ET.Element(f"{{{PLS}}}lexicon", {"version": "1.0", "alphabet": "ipa", f"{{{XML}}}lang": language})
     for word, (kind, phonetic) in sorted(grouped.items()):
         if kind not in ("alias", "phoneme"):
             raise ValueError(f"Unsupported PLS rule type {kind!r}.")
@@ -135,7 +156,7 @@ def export(records, destination, fmt, model=None, dialect=None, voice=None):
         import json
 
         buffer = io.StringIO(newline="")
-        writer = csv.DictWriter(buffer, fieldnames=FIELDS)
+        writer = csv.DictWriter(buffer, fieldnames=FIELDS + LANGUAGE_FIELDS)
         writer.writeheader()
         for row in records:
             writer.writerow({name: json.dumps(value, ensure_ascii=False) if isinstance(value, (list, dict))

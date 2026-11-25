@@ -2,6 +2,8 @@
 
 Agent Skill and local CLI for Norwegian Bokmål synthesis. It preserves the manuscript, consults the NB Uttale dialect lexicon, prepares scoped ElevenLabs dictionaries, analyzes audio with Praat, and can repair individual sentences when acoustic evidence supports a splice.
 
+The `audioqa` commands also scan long recordings for digital and speech candidates, generate an interactive review bundle, and route mixed Bokmål, Ukrainian and English manuscripts. See [installation and workflows for audio QA](references/audioqa.md).
+
 ## Install
 
 Use Python 3.11–3.13. FFmpeg on PATH is needed for Whisper, automatic NoFA input preparation and audio formats that Praat cannot open. NoFA uses Montreal Forced Aligner 1.0 separately.

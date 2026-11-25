@@ -8,6 +8,7 @@ import os
 import re
 import time
 import wave
+from collections import defaultdict
 from dataclasses import dataclass, field
 from urllib.parse import quote, urlencode
 
@@ -108,8 +109,9 @@ def locator(data):
 def request_body(model, voice, segment, locators, settings, seed):
     transport = model_config(model)["transport"]
     body = {"model_id": model, "seed": seed, "apply_text_normalization": "auto"}
-    if model_config(model)["norwegian"]:
-        body["language_code"] = "no"
+    language = segment.get("language_code", "no" if model_config(model)["norwegian"] else None)
+    if language:
+        body["language_code"] = language
     if locators:
         body["pronunciation_dictionary_locators"] = locators
     if transport == "dialogue":
@@ -159,8 +161,8 @@ class ElevenLabs:
             raise APIError("ElevenLabs returned an unexpected response object.")
         return result
 
-    def dictionary(self, rules):
-        name = digest([(r["word"], r["type"], r["value"]) for r in rules])
+    def dictionary(self, rules, language="nb-NO"):
+        name = digest([language, [(r["word"], r["type"], r["value"]) for r in rules]])
         file = self.cache / f"pls-{name}.json"
         with FileLock(file.with_suffix(".lock"), timeout=180):
             if file.exists():
@@ -168,7 +170,7 @@ class ElevenLabs:
             response = self.post(
                 "/pronunciation-dictionaries/add-from-file",
                 data={"name": f"norwegian-pronunciation-{name[:12]}"},
-                files={"file": ("pronunciation.pls", make_pls(rules), "application/pls+xml")},
+                files={"file": ("pronunciation.pls", make_pls(rules, language), "application/pls+xml")},
             )
             result = locator(self.json_response(response))
             self.budget.dictionary_uploads += 1
@@ -176,8 +178,12 @@ class ElevenLabs:
             return result
 
     def websocket(self, model, voice, segment, locators, settings):
-        query = urlencode({"model_id": model, "language_code": "no", "sync_alignment": "true",
-                           "output_format": config("models")["output_format"]})
+        parameters = {"model_id": model, "sync_alignment": "true",
+                      "output_format": config("models")["output_format"]}
+        language = segment.get("language_code", "no")
+        if language:
+            parameters["language_code"] = language
+        query = urlencode(parameters)
         initial = {"voices": [voice]}
         if settings:
             initial["voice_settings"] = settings
@@ -210,10 +216,10 @@ class ElevenLabs:
         raise APIError("ElevenLabs dialogue WebSocket timed out.")
 
     def cache_path(self, model, voice, segment, rules, settings, seed, take=0):
-        request = {"text": segment["text"]}
+        request = {"text": segment["text"], "language_code": segment.get("language_code", "no")}
         if model_config(model)["transport"] != "dialogue_ws":
             request.update({name: segment.get(name, "").strip() for name in ("previous_text", "next_text")})
-        values = [(row["word"], row["type"], row["value"]) for row in rules]
+        values = [(row["word"], row["type"], row["value"], row.get("language", "nb-NO")) for row in rules]
         identity = digest([3, model, voice, request, values, settings or {}, seed, take, config("models")["output_format"]])
         return self.cache / f"audio-{identity}.json"
 
@@ -244,7 +250,12 @@ class ElevenLabs:
                 self.budget.cache_hits += 1
                 return base64.b64decode(cached.pop("pcm"), validate=True), {**cached, "cached": True}
             self.budget.check(chars)
-            locators = [self.dictionary(rules)] if rules else []
+            groups = defaultdict(list)
+            for rule in rules:
+                groups[rule.get("language", "nb-NO")].append(rule)
+            if len(groups) > 3:
+                raise ValueError("ElevenLabs accepts at most three pronunciation dictionaries per request.")
+            locators = [self.dictionary(rows, language) for language, rows in groups.items()]
             self.budget.reserve(chars)
             if spec["transport"] == "dialogue_ws":
                 self.budget.unknown_cost_requests += 1

@@ -10,3 +10,10 @@ runs/
 *.wav
 *.mp3
 *.TextGrid
+models/asr/
+models/phoneme/
+models/anomaly_detection/
+data/clean_reference/
+data/confirmed_artifacts/
+data/pronunciation_errors/
+data/false_positives/
